@@ -52,3 +52,7 @@ CI runs all of these on each push to `main`, with stable Rust and with Rust 1.82
 ## Contributing
 
 This repository does not accept pull requests. You can report a bug by opening an issue.
+
+## License
+
+restir is released under the MIT License. See [LICENSE](LICENSE).
