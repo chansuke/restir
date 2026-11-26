@@ -4,7 +4,7 @@
 use crate::ast::*;
 use crate::inline::{is_simple_name, parse_inlines};
 
-const TAB_WIDTH: usize = 8;
+pub(crate) const TAB_WIDTH: usize = 8;
 
 /// Nesting depth (block quotes, list items) after which the remaining lines
 /// are kept as one paragraph, so hostile input cannot overflow the stack.
@@ -54,7 +54,7 @@ fn split_lines(src: &str) -> Vec<Line<'_>> {
 }
 
 /// Column of byte `byte` in `raw`.
-fn column(raw: &str, byte: usize) -> usize {
+pub(crate) fn column(raw: &str, byte: usize) -> usize {
     raw[..byte].chars().fold(0, |col, c| {
         if c == '\t' {
             (col / TAB_WIDTH + 1) * TAB_WIDTH
@@ -110,11 +110,11 @@ fn min_indent(lines: &[Line<'_>]) -> usize {
 }
 
 #[derive(Debug, Clone, Copy)]
-struct Enumerator {
+pub(crate) struct Enumerator {
     /// `None` for `#`.
-    value: Option<u32>,
+    pub(crate) value: Option<u32>,
     /// Marker length in bytes, including the `.`.
-    len: usize,
+    pub(crate) len: usize,
 }
 
 impl Enumerator {
@@ -172,7 +172,7 @@ fn bullet_marker(text: &str) -> Option<BulletMarker> {
 }
 
 /// `N. ` or `#. `; the marker must be followed by a blank and content.
-fn enumerator(text: &str) -> Option<Enumerator> {
+pub(crate) fn enumerator(text: &str) -> Option<Enumerator> {
     let digits = text.bytes().take_while(u8::is_ascii_digit).count();
     let (value, len) = if digits > 0 {
         (Some(text[..digits].parse::<u32>().ok()?), digits + 1)
@@ -191,7 +191,7 @@ fn is_explicit_markup(text: &str) -> bool {
 }
 
 /// A line of one repeated ASCII punctuation character.
-fn is_adornment(text: &str) -> bool {
+pub(crate) fn is_adornment(text: &str) -> bool {
     let bytes = text.as_bytes();
     bytes
         .first()

@@ -6,6 +6,8 @@ pub mod ast;
 mod block;
 mod html;
 mod inline;
+#[cfg(kani)]
+mod proofs;
 
 pub use ast::*;
 

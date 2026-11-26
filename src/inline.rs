@@ -54,6 +54,23 @@ pub(crate) fn is_simple_name(name: &str) -> bool {
     !prev_punct
 }
 
+/// Splits reference content `label <target>` when it ends with `<...>`
+/// preceded by whitespace. Returns the label's end and the target's range,
+/// both relative to `content`; without a target the label is everything.
+pub(crate) fn split_reference(content: &str) -> (usize, Option<std::ops::Range<usize>>) {
+    let split = content
+        .strip_suffix('>')
+        .and_then(|inner| inner.rfind('<'))
+        .filter(|&p| content[..p].ends_with(char::is_whitespace) && p + 1 < content.len() - 1);
+    match split {
+        Some(p) => (
+            content[..p].trim_end().len(),
+            Some(p + 1..content.len() - 1),
+        ),
+        None => (content.len(), None),
+    }
+}
+
 /// Parses `text`, which starts at absolute byte `offset` in the source.
 pub(crate) fn parse_inlines(text: &str, offset: u32) -> Inlines<'_> {
     let mut scanner = Scanner {
@@ -265,19 +282,9 @@ impl<'a> Scanner<'a> {
     /// Splits `label <target>` when the content ends with `<...>` preceded
     /// by whitespace; otherwise the whole content is the label.
     fn reference(&self, cs: usize, ce: usize, anonymous: bool) -> Inline<'a> {
-        let content = &self.text[cs..ce];
-        let split = content
-            .strip_suffix('>')
-            .and_then(|inner| inner.rfind('<'))
-            .filter(|&p| content[..p].ends_with(char::is_whitespace) && p + 1 < content.len() - 1);
-        let (label, target) = match split {
-            Some(p) => {
-                let label_end = cs + content[..p].trim_end().len();
-                let target = self.spanned_slice(cs + p + 1, ce - 1);
-                (self.spanned_slice(cs, label_end), Some(target))
-            }
-            None => (self.spanned_slice(cs, ce), None),
-        };
+        let (label_end, target) = split_reference(&self.text[cs..ce]);
+        let label = self.spanned_slice(cs, cs + label_end);
+        let target = target.map(|t| self.spanned_slice(cs + t.start, cs + t.end));
         Inline::Reference {
             label,
             target,
