@@ -55,4 +55,4 @@ This repository does not accept pull requests. You can report a bug by opening a
 
 ## License
 
-restir is released under the MIT License. See [LICENSE](LICENSE).
+restir is released under the MIT License. See the `LICENSE` file.
