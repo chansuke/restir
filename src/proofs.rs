@@ -36,7 +36,9 @@ fn enumerator_matches_its_grammar() {
         assert!(e.len >= 2 && e.len < b.len());
         assert!(b[e.len - 1] == b'.' && b[e.len] == b' ');
         match e.value {
-            None => assert!(e.len == 2 && b[0] == b'#'),
+            None => {
+                assert!(e.len == 2 && b[0] == b'#');
+            }
             Some(v) => {
                 let mut expected: u64 = 0;
                 for &d in &b[..e.len - 1] {
