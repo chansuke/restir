@@ -31,10 +31,11 @@ fn block_outline(b: &Block<'_>) -> String {
                 BulletMarker::Hyphen => '-',
                 BulletMarker::Asterisk => '*',
                 BulletMarker::Plus => '+',
+                other => panic!("unhandled variant {other:?}"),
             };
             format!("UL{m}({})", items_outline(items))
         }
-        Block::EnumeratedList { start, items } => {
+        Block::EnumeratedList { start, items, .. } => {
             let s = start.map_or("#".to_string(), |n| n.to_string());
             format!("OL{s}({})", items_outline(items))
         }
@@ -58,6 +59,7 @@ fn block_outline(b: &Block<'_>) -> String {
         }
         Block::Transition => "HR".to_string(),
         Block::Comment(s) => format!("C{s:?}"),
+        other => panic!("unhandled variant {other:?}"),
     }
 }
 
@@ -98,6 +100,7 @@ pub fn inlines_outline(inlines: &[Spanned<Inline<'_>>]) -> String {
                     None => format!("{kind}{:?}", label.node),
                 }
             }
+            other => panic!("unhandled variant {other:?}"),
         })
         .collect::<Vec<_>>()
         .join(" ")
@@ -201,6 +204,7 @@ fn check_block(src: &str, b: &Spanned<Block<'_>>) {
                 BulletMarker::Hyphen => b'-',
                 BulletMarker::Asterisk => b'*',
                 BulletMarker::Plus => b'+',
+                other => panic!("unhandled variant {other:?}"),
             };
             check_items(src, items, b.span);
             for item in items {
@@ -236,6 +240,7 @@ fn check_block(src: &str, b: &Spanned<Block<'_>>) {
                 "comment text",
             );
         }
+        other => panic!("unhandled variant {other:?}"),
     }
 }
 
@@ -374,6 +379,7 @@ fn check_inline(src: &str, i: &Spanned<Inline<'_>>) {
             }
             check_siblings(parts, i.span, "reference part");
         }
+        other => panic!("unhandled variant {other:?}"),
     }
 }
 

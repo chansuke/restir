@@ -309,7 +309,7 @@ impl<'a> Parser<'a> {
         end: usize,
     ) -> Spanned<Block<'a>> {
         let style = HeadingStyle {
-            adornment,
+            adornment: char::from(adornment),
             overline,
         };
         let index = match self.styles.iter().position(|s| *s == style) {

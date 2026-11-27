@@ -46,7 +46,7 @@ fn heading_levels_follow_first_appearance() {
         .collect();
     assert_eq!(
         styles,
-        [(b'=', true), (b'=', false), (b'-', false), (b'=', false)]
+        [('=', true), ('=', false), ('-', false), ('=', false)]
     );
 }
 
