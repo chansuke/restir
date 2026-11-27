@@ -2,6 +2,7 @@
 
 [![crates.io](https://img.shields.io/crates/v/restir.svg)](https://crates.io/crates/restir)
 [![docs.rs](https://img.shields.io/docsrs/restir)](https://docs.rs/restir)
+[![CI](https://github.com/chansuke/restir/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/chansuke/restir/actions/workflows/ci.yml)
 
 restir is a reStructuredText parser for Rust. It has no dependencies and does not copy the input. Every text node in the tree is a `&str` slice of your source, and every node carries a `Span` with `u32` byte offsets into it.
 
