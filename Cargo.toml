@@ -4,6 +4,12 @@ version = "0.1.0"
 edition = "2021"
 rust-version = "1.82"
 license = "MIT"
+description = "A zero-copy reStructuredText parser with no dependencies"
+repository = "https://github.com/chansuke/restir"
+readme = "README.md"
+keywords = ["rst", "restructuredtext", "parser", "zero-copy", "markup"]
+categories = ["parser-implementations", "text-processing"]
+include = ["/src", "/tests", "/README.md", "/LICENSE"]
 
 [dependencies]
 
